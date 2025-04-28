@@ -1,6 +1,9 @@
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const { signup, login } = require("../controllers/authController");
+const validate = require('../middleware/validate');
+const { signupSchema, loginSchema } = require('../validations/authSchemas');
+
 
 const router = express.Router();
 
@@ -10,7 +13,7 @@ const signupLimiter = rateLimit({
   message: { error: "Too many signup attempts, please try again later." },
 });
 
-router.post("/signup", signupLimiter, signup);
-router.post("/login", login);
+router.post("/signup", signupLimiter, validate(signupSchema), signup);
+router.post("/login", validate(loginSchema), login);
 
 module.exports = router;
