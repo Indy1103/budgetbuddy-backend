@@ -29,3 +29,8 @@ Thumbs.db
 
 # 8. Miscellaneous
 *.tgz
+
+# 9. Prisma
+# Ignore any local Prisma-generated env files or databases
+prisma/.env
+prisma/dev.db         # if you ever used SQLite locally

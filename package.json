@@ -2,11 +2,13 @@
   "name": "budgetbuddy-backend",
   "version": "1.0.0",
   "description": "A budget planning app",
-  "main": "index.js",
+  "main": "src/server.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon --watch src --exec \"node src/server.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +25,8 @@
     "dotenv": "^16.5.0",
     "nodemon": "^3.1.10",
     "prisma": "^6.6.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0"
   }
 }
