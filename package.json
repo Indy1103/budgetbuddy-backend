@@ -1,0 +1,22 @@
+{
+  "name": "budgetbuddy-backend",
+  "version": "1.0.0",
+  "description": "A budget planning app",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Indy1103/budgetbuddy-backend.git"
+  },
+  "author": "Induwara",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Indy1103/budgetbuddy-backend/issues"
+  },
+  "homepage": "https://github.com/Indy1103/budgetbuddy-backend#readme"
+}
