@@ -1,18 +1,21 @@
-
 FROM node:18-alpine
-
-# Create and set working directory inside the container
 WORKDIR /app
 
-# Copy package manifests and install dependencies
+# 1) Copy your package manifests
 COPY package*.json ./
+
+# 2) Copy ALL of prisma (schema + migrations)
+COPY prisma ./prisma
+
+# 3) Install deps
 RUN npm install
 
-# Copy the rest of the application source code
+# 4) Generate the Prisma Client (now that schema is present)
+RUN npx prisma generate
+
+# 5) Copy the rest of your source code
 COPY . .
 
-# Expose the port that the API server listens on
 EXPOSE 4000
 
-# Default command to start the application (overridden in dev by docker-compose)
 CMD ["npm", "start"]

@@ -26,8 +26,9 @@ services:
       - "5555:5555"
     volumes:
       - .:/app
-      - /app/node_modules 
+      - node_modules:/app/node_modules 
     command: npm run dev
 
 volumes:
   db_data:
+  node_modules:
