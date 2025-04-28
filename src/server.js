@@ -38,6 +38,9 @@ app.get('/health', async (req, res) => {
 
 app.use('/api/auth', authRouter);
 
+const transactionsRouter = require('./routes/transactions');
+app.use('/api/transactions', transactionsRouter);
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
