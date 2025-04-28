@@ -19,7 +19,7 @@
     "url": "https://github.com/Indy1103/budgetbuddy-backend/issues"
   },
   "homepage": "https://github.com/Indy1103/budgetbuddy-backend#readme",
-  "dependencies": {
+  "devDependencies": {
     "dotenv": "^16.5.0"
   }
 }
