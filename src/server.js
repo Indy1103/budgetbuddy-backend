@@ -22,7 +22,29 @@ const app = express();
 
 app.use(helmet());
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+// Configure CORS dynamically using the environment variable
+const allowedOrigins = [
+  'http://localhost:3000', // Allow your local React development server
+  'http://localhost:5174', // Allow your other local React development server if you use it
+  process.env.FRONTEND_URL // Allow your deployed Vercel frontend URL
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    // and allow origins that are in our allowedOrigins list
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      // Reject origins not in the allowed list
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      callback(new Error(msg), false);
+    }
+  },
+  optionsSuccessStatus: 200 // For legacy browser support
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

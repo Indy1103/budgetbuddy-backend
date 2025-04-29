@@ -1,4 +1,4 @@
-const { PrismaClient } = require('../generated/prisma');
+const { PrismaClient } = require("../generated/prisma");
 const prisma = new PrismaClient();
 
 // List transactions for the authenticated user
@@ -6,7 +6,7 @@ async function getTransactions(req, res, next) {
   try {
     const txs = await prisma.transaction.findMany({
       where: { userId: req.user.id },
-      orderBy: { date: 'desc' },
+      orderBy: { date: "desc" },
     });
     res.json(txs);
   } catch (err) {
@@ -17,10 +17,17 @@ async function getTransactions(req, res, next) {
 // Create a new transaction
 async function createTransaction(req, res, next) {
   try {
+
+    if (!req.user?.email) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
     const { amount, type, category, note, date } = req.body;
     const tx = await prisma.transaction.create({
       data: {
-        userId: req.user.id,
+        user: {
+          connect: { email: req.user.email  },
+        },
         amount,
         type,
         category,
@@ -38,12 +45,25 @@ async function createTransaction(req, res, next) {
 async function updateTransaction(req, res, next) {
   try {
     const { id } = req.params;
-    const updates = req.body;
-    const tx = await prisma.transaction.updateMany({
+    const { amount, type, category, note, date } = req.body;
+
+    // Build your updates object, converting date to a real Date
+    const data = {
+      ...(amount     !== undefined && { amount }),
+      ...(type       && { type }),
+      ...(category   && { category }),
+      ...(note       !== undefined && { note }),
+      ...(date       && { date: new Date(date) }),
+    };
+
+    const result = await prisma.transaction.updateMany({
       where: { id, userId: req.user.id },
-      data: updates,
+      data,
     });
-    if (tx.count === 0) return res.status(404).json({ error: 'Not found' });
+
+    if (result.count === 0) {
+      return res.status(404).json({ error: 'Transaction not found' });
+    }
     res.json({ success: true });
   } catch (err) {
     next(err);
@@ -57,7 +77,7 @@ async function deleteTransaction(req, res, next) {
     const tx = await prisma.transaction.deleteMany({
       where: { id, userId: req.user.id },
     });
-    if (tx.count === 0) return res.status(404).json({ error: 'Not found' });
+    if (tx.count === 0) return res.status(404).json({ error: "Not found" });
     res.json({ success: true });
   } catch (err) {
     next(err);
